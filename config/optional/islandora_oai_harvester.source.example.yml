@@ -12,6 +12,7 @@ available_formats: {  }
 available_sets: {  }
 bundle: islandora_object
 model_tid: null
+category_tid: null
 collection_nid: null
 default_status: false
 mappings:

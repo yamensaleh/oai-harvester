@@ -86,6 +86,7 @@ final class OaiSourceForm extends EntityForm {
     $form['destination'] = ['#type' => 'details', '#title' => $this->t('3. Islandora destination'), '#open' => TRUE];
     $form['destination']['bundle'] = ['#type' => 'select', '#title' => $this->t('Content type'), '#options' => $bundles, '#default_value' => $settings['bundle'], '#required' => TRUE];
     $form['destination']['model_tid'] = ['#type' => 'entity_autocomplete', '#title' => $this->t('Islandora model'), '#target_type' => 'taxonomy_term', '#selection_settings' => ['target_bundles' => ['islandora_models']], '#default_value' => !empty($settings['model_tid']) ? $this->entityTypeManager->getStorage('taxonomy_term')->load($settings['model_tid']) : NULL, '#required' => TRUE];
+    $form['destination']['category_tid'] = ['#type' => 'entity_autocomplete', '#title' => $this->t('Category'), '#target_type' => 'taxonomy_term', '#selection_settings' => ['target_bundles' => ['category']], '#default_value' => !empty($settings['category_tid']) ? $this->entityTypeManager->getStorage('taxonomy_term')->load($settings['category_tid']) : NULL, '#required' => TRUE, '#description' => $this->t('Required by this repository’s Islandora object content type.')];
     $form['destination']['collection_nid'] = ['#type' => 'entity_autocomplete', '#title' => $this->t('Target collection'), '#target_type' => 'node', '#selection_settings' => ['target_bundles' => [$settings['bundle']]], '#default_value' => !empty($settings['collection_nid']) ? $this->entityTypeManager->getStorage('node')->load($settings['collection_nid']) : NULL];
     $form['destination']['default_status'] = ['#type' => 'checkbox', '#title' => $this->t('Publish new records'), '#default_value' => $settings['default_status'], '#description' => $this->t('Disabled by default; new records are unpublished.')];
 
@@ -172,6 +173,9 @@ final class OaiSourceForm extends EntityForm {
     if (!isset($definitions['field_model']) || $definitions['field_model']->getType() !== 'entity_reference' || $definitions['field_model']->getFieldStorageDefinition()->getSetting('target_type') !== 'taxonomy_term') {
       $form_state->setErrorByName('bundle', $this->t('The selected content type does not have the verified Islandora model field field_model.'));
     }
+    if (!isset($definitions['field_category']) || $definitions['field_category']->getType() !== 'entity_reference' || $definitions['field_category']->getFieldStorageDefinition()->getSetting('target_type') !== 'taxonomy_term') {
+      $form_state->setErrorByName('bundle', $this->t('The selected content type does not have the required category field field_category.'));
+    }
     if (!isset($definitions['field_member_of']) || $definitions['field_member_of']->getType() !== 'entity_reference' || $definitions['field_member_of']->getFieldStorageDefinition()->getSetting('target_type') !== 'node') {
       $form_state->setErrorByName('bundle', $this->t('The selected content type does not have the verified collection relationship field field_member_of.'));
     }
@@ -224,7 +228,7 @@ final class OaiSourceForm extends EntityForm {
       ->set('endpoint', $values['endpoint'])->set('auth_key_id', $values['auth_key_id'] ?: NULL)
       ->set('timeout', (int) $values['timeout'])->set('max_retries', (int) $values['max_retries'])->set('rate_limit_ms', (int) $values['rate_limit_ms'])
       ->set('metadata_prefix', $values['metadata_prefix'])->set('granularity', $values['granularity'])->set('set_specs', array_values(array_unique(array_merge(array_values(array_filter($values['set_choices'] ?? [])), $lineList((string) $values['set_specs'])))))
-      ->set('bundle', $values['bundle'])->set('model_tid', $values['model_tid'] ? (int) $values['model_tid'] : NULL)->set('collection_nid', $values['collection_nid'] ? (int) $values['collection_nid'] : NULL)->set('default_status', (bool) $values['default_status'])
+      ->set('bundle', $values['bundle'])->set('model_tid', $values['model_tid'] ? (int) $values['model_tid'] : NULL)->set('category_tid', $values['category_tid'] ? (int) $values['category_tid'] : NULL)->set('collection_nid', $values['collection_nid'] ? (int) $values['collection_nid'] : NULL)->set('default_status', (bool) $values['default_status'])
       ->set('mappings', $mappings)->set('frequency', $values['frequency'])->set('batch_size', (int) $values['batch_size'])->set('update_policy', $values['update_policy'])->set('deletion_policy', $values['deletion_policy'])
       ->set('file_settings', ['enabled' => (bool) $values['enabled'], 'source_element' => $values['source_element'], 'allowed_domains' => $lineList((string) $values['allowed_domains']), 'allowed_mime_types' => $commaList((string) $values['allowed_mime_types']), 'allowed_extensions' => $commaList((string) $values['allowed_extensions']), 'max_bytes' => (int) $values['max_bytes'], 'media_bundle' => $values['media_bundle'], 'file_field' => $values['file_field'], 'media_of_field' => $values['media_of_field']]);
     $result = parent::save($form, $form_state);

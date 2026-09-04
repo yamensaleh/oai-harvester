@@ -31,7 +31,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   config_export = {
  *     "id", "label", "status", "endpoint", "auth_key_id",
  *     "metadata_prefix", "granularity", "set_specs", "repository_info",
- *     "available_formats", "available_sets", "bundle", "model_tid",
+ *     "available_formats", "available_sets", "bundle", "model_tid", "category_tid",
  *     "collection_nid", "default_status", "mappings", "frequency",
  *     "batch_size", "update_policy", "deletion_policy", "timeout",
  *     "max_retries", "rate_limit_ms", "file_settings"
@@ -57,6 +57,7 @@ final class OaiSource extends ConfigEntityBase implements OaiSourceInterface {
   protected array $available_sets = [];
   protected string $bundle = 'islandora_object';
   protected ?int $model_tid = NULL;
+  protected ?int $category_tid = NULL;
   protected ?int $collection_nid = NULL;
   protected bool $default_status = FALSE;
   protected array $mappings = [];
@@ -130,6 +131,7 @@ final class OaiSource extends ConfigEntityBase implements OaiSourceInterface {
       'available_sets' => $this->available_sets,
       'bundle' => $this->bundle,
       'model_tid' => $this->model_tid,
+      'category_tid' => $this->category_tid,
       'collection_nid' => $this->collection_nid,
       'default_status' => $this->default_status,
       'mappings' => $this->mappings,

@@ -46,6 +46,9 @@ islandora_oai_harvester.source.*:
     model_tid:
       type: integer
       nullable: true
+    category_tid:
+      type: integer
+      nullable: true
     collection_nid:
       type: integer
       nullable: true

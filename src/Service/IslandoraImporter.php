@@ -134,6 +134,9 @@ final class IslandoraImporter implements DestinationImporterInterface {
     if ($node->hasField('field_model') && !empty($settings['model_tid'])) {
       $node->set('field_model', ['target_id' => (int) $settings['model_tid']]);
     }
+    if ($node->hasField('field_category') && !empty($settings['category_tid'])) {
+      $node->set('field_category', ['target_id' => (int) $settings['category_tid']]);
+    }
     if ($node->hasField('field_member_of') && !empty($settings['collection_nid'])) {
       $node->set('field_member_of', ['target_id' => (int) $settings['collection_nid']]);
     }
