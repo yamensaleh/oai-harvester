@@ -6,6 +6,7 @@ namespace Drupal\islandora_oai_harvester\Form;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityForm;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,6 +29,15 @@ final class OaiSourceForm extends EntityForm {
     $instance = parent::create($container);
     $instance->entityFieldManager = $container->get('entity_field.manager');
     return $instance;
+  }
+
+  /**
+   * Prevents EntityForm from assigning raw form strings to typed config values.
+   *
+   * Values are normalized and assigned by ::save().
+   */
+  protected function buildEntity(array $form, FormStateInterface $form_state): EntityInterface {
+    return $this->entity;
   }
 
   /**
