@@ -7,7 +7,6 @@ namespace Drupal\islandora_oai_harvester\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
@@ -23,13 +22,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class HarvesterController extends ControllerBase {
 
-  public function __construct(private readonly Connection $database, private readonly EntityTypeManagerInterface $entityTypeManager, private readonly OaiPmhClientInterface $client, private readonly MetadataParserManager $parserManager) {}
+  public function __construct(private readonly Connection $database, private readonly OaiPmhClientInterface $client, private readonly MetadataParserManager $parserManager) {}
 
   /**
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('database'), $container->get('entity_type.manager'), $container->get('islandora_oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'));
+    return new static($container->get('database'), $container->get('islandora_oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'));
   }
 
   /**
