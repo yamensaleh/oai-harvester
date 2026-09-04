@@ -1,0 +1,6 @@
+islandora_oai_harvester.sources:
+  title: 'OAI-PMH Harvester'
+  description: 'Configure OAI-PMH sources and review harvests.'
+  route_name: entity.islandora_oai_source.collection
+  parent: system.admin_config_islandora
+  weight: 30

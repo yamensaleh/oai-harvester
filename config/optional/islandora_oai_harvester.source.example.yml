@@ -1,0 +1,58 @@
+langcode: en
+status: false
+id: example
+label: 'Example OAI-PMH source (disabled)'
+endpoint: 'https://example.org/oai'
+auth_key_id: null
+metadata_prefix: oai_dc
+granularity: seconds
+set_specs: {  }
+repository_info: {  }
+available_formats: {  }
+available_sets: {  }
+bundle: islandora_object
+model_tid: null
+collection_nid: null
+default_status: false
+mappings:
+  -
+    source: 'dc:title'
+    target: title
+    behavior: replace
+    cardinality: first
+    transform: trim
+    taxonomy_vocabulary: ''
+    skip_empty: true
+  -
+    source: 'dc:description'
+    target: field_description
+    behavior: replace
+    cardinality: all
+    transform: trim
+    taxonomy_vocabulary: ''
+    skip_empty: true
+  -
+    source: 'dc:language'
+    target: field_language
+    behavior: replace
+    cardinality: all
+    transform: language_code
+    taxonomy_vocabulary: language
+    skip_empty: true
+frequency: manual
+batch_size: 100
+update_policy: replace_mapped
+deletion_policy: unpublish
+timeout: 30
+max_retries: 3
+rate_limit_ms: 250
+file_settings:
+  enabled: false
+  source_element: 'dc:identifier'
+  allowed_domains: {  }
+  allowed_mime_types: {  }
+  allowed_extensions: {  }
+  max_bytes: 104857600
+  media_bundle: file
+  file_field: field_media_file
+  media_of_field: field_media_of

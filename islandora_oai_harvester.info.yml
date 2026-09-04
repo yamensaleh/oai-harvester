@@ -1,0 +1,13 @@
+name: Islandora OAI-PMH Harvester
+type: module
+description: 'Asynchronously harvests OAI-PMH metadata into Islandora objects.'
+package: Islandora
+core_version_requirement: ^10
+dependencies:
+  - drupal:node
+  - drupal:media
+  - drupal:file
+  - drupal:taxonomy
+  - drupal:options
+  - islandora:islandora
+  - key:key

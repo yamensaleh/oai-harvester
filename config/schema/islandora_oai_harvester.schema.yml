@@ -1,0 +1,114 @@
+islandora_oai_harvester.source.*:
+  type: config_entity
+  label: 'OAI-PMH source'
+  mapping:
+    id:
+      type: string
+      label: 'Machine name'
+    label:
+      type: label
+      label: 'Name'
+    uuid:
+      type: string
+    status:
+      type: boolean
+      label: 'Enabled'
+    endpoint:
+      type: uri
+      label: 'Endpoint'
+    auth_key_id:
+      type: string
+      nullable: true
+      label: 'Authentication key'
+    metadata_prefix:
+      type: string
+      label: 'Metadata prefix'
+    granularity:
+      type: string
+      label: 'Datestamp granularity'
+    set_specs:
+      type: sequence
+      sequence:
+        type: string
+    repository_info:
+      type: ignore
+      label: 'Repository identity information'
+    available_formats:
+      type: sequence
+      sequence:
+        type: ignore
+    available_sets:
+      type: sequence
+      sequence:
+        type: ignore
+    bundle:
+      type: string
+    model_tid:
+      type: integer
+      nullable: true
+    collection_nid:
+      type: integer
+      nullable: true
+    default_status:
+      type: boolean
+    mappings:
+      type: sequence
+      sequence:
+        type: mapping
+        mapping:
+          source:
+            type: string
+          target:
+            type: string
+          behavior:
+            type: string
+          cardinality:
+            type: string
+          transform:
+            type: string
+          taxonomy_vocabulary:
+            type: string
+            nullable: true
+          skip_empty:
+            type: boolean
+    frequency:
+      type: string
+    batch_size:
+      type: integer
+    update_policy:
+      type: string
+    deletion_policy:
+      type: string
+    timeout:
+      type: integer
+    max_retries:
+      type: integer
+    rate_limit_ms:
+      type: integer
+    file_settings:
+      type: mapping
+      mapping:
+        enabled:
+          type: boolean
+        source_element:
+          type: string
+        allowed_domains:
+          type: sequence
+          sequence:
+            type: string
+        allowed_mime_types:
+          type: sequence
+          sequence:
+            type: string
+        allowed_extensions:
+          type: sequence
+          sequence:
+            type: string
+        max_bytes:
+          type: integer
+        media_bundle:
+          type: string
+        file_field:
+          type: string
+        media_of_field:
+          type: string

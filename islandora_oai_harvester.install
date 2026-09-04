@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * @file
+ * Install and update hooks for Islandora OAI-PMH Harvester.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_oai_harvester_schema(): array {
+  $schema['islandora_oai_harvest_run'] = [
+    'description' => 'OAI-PMH harvest runs and aggregate progress.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'source_id' => ['type' => 'varchar_ascii', 'length' => 128, 'not null' => TRUE],
+      'mode' => ['type' => 'varchar_ascii', 'length' => 16, 'not null' => TRUE, 'default' => 'incremental'],
+      'from_date' => ['type' => 'varchar_ascii', 'length' => 32, 'not null' => FALSE],
+      'until_date' => ['type' => 'varchar_ascii', 'length' => 32, 'not null' => FALSE],
+      'set_specs' => ['type' => 'blob', 'size' => 'normal', 'not null' => FALSE],
+      'state' => ['type' => 'varchar_ascii', 'length' => 32, 'not null' => TRUE, 'default' => 'pending'],
+      'started' => ['type' => 'int', 'not null' => TRUE],
+      'completed' => ['type' => 'int', 'not null' => FALSE],
+      'discovery_pending' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'discovered' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'queued' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'processed' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'created_count' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'updated_count' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'skipped_count' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'warning_count' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'failed_count' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'resumption_token' => ['type' => 'text', 'size' => 'normal', 'not null' => FALSE],
+      'message' => ['type' => 'text', 'size' => 'normal', 'not null' => FALSE],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'source_started' => ['source_id', 'started'],
+      'state' => ['state'],
+    ],
+  ];
+
+  $schema['islandora_oai_raw_record'] = [
+    'description' => 'Raw per-run OAI records kept outside queue items.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'run_id' => ['type' => 'int', 'not null' => TRUE],
+      'source_id' => ['type' => 'varchar_ascii', 'length' => 128, 'not null' => TRUE],
+      'oai_identifier' => ['type' => 'varchar', 'length' => 512, 'not null' => TRUE],
+      'datestamp' => ['type' => 'varchar_ascii', 'length' => 32, 'not null' => FALSE],
+      'set_specs' => ['type' => 'blob', 'size' => 'normal', 'not null' => FALSE],
+      'deleted' => ['type' => 'int', 'size' => 'tiny', 'not null' => TRUE, 'default' => 0],
+      'xml' => ['type' => 'blob', 'size' => 'big', 'not null' => FALSE],
+      'status' => ['type' => 'varchar_ascii', 'length' => 24, 'not null' => TRUE, 'default' => 'queued'],
+      'attempts' => ['type' => 'int', 'not null' => TRUE, 'default' => 0],
+      'result' => ['type' => 'varchar_ascii', 'length' => 24, 'not null' => FALSE],
+      'message' => ['type' => 'text', 'size' => 'normal', 'not null' => FALSE],
+      'created' => ['type' => 'int', 'not null' => TRUE],
+      'changed' => ['type' => 'int', 'not null' => TRUE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'run_record' => ['run_id', 'source_id', 'oai_identifier'],
+    ],
+    'indexes' => [
+      'run_status' => ['run_id', 'status'],
+    ],
+  ];
+
+  $schema['islandora_oai_discovery_page'] = [
+    'description' => 'Idempotency markers for OAI discovery pages.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'run_id' => ['type' => 'int', 'not null' => TRUE],
+      'page_key' => ['type' => 'varchar_ascii', 'length' => 64, 'not null' => TRUE],
+      'status' => ['type' => 'varchar_ascii', 'length' => 16, 'not null' => TRUE],
+      'changed' => ['type' => 'int', 'not null' => TRUE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'run_page' => ['run_id', 'page_key'],
+    ],
+  ];
+
+  $schema['islandora_oai_record'] = [
+    'description' => 'Stable source record to Islandora object identity map.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'source_id' => ['type' => 'varchar_ascii', 'length' => 128, 'not null' => TRUE],
+      'oai_identifier' => ['type' => 'varchar', 'length' => 512, 'not null' => TRUE],
+      'node_id' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE],
+      'source_datestamp' => ['type' => 'varchar_ascii', 'length' => 32, 'not null' => FALSE],
+      'set_specs' => ['type' => 'blob', 'size' => 'normal', 'not null' => FALSE],
+      'first_harvested' => ['type' => 'int', 'not null' => TRUE],
+      'last_harvested' => ['type' => 'int', 'not null' => TRUE],
+      'last_sync' => ['type' => 'int', 'not null' => FALSE],
+      'sync_status' => ['type' => 'varchar_ascii', 'length' => 24, 'not null' => TRUE],
+      'last_run_id' => ['type' => 'int', 'not null' => FALSE],
+      'raw_id' => ['type' => 'int', 'not null' => FALSE],
+      'metadata_hash' => ['type' => 'varchar_ascii', 'length' => 64, 'not null' => FALSE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'source_identifier' => ['source_id', 'oai_identifier'],
+    ],
+    'indexes' => [
+      'node_id' => ['node_id'],
+      'last_run_id' => ['last_run_id'],
+    ],
+  ];
+
+  $schema['islandora_oai_imported_file'] = [
+    'description' => 'Idempotency map for files imported from OAI metadata URLs.',
+    'fields' => [
+      'id' => ['type' => 'serial', 'not null' => TRUE],
+      'source_id' => ['type' => 'varchar_ascii', 'length' => 128, 'not null' => TRUE],
+      'oai_identifier' => ['type' => 'varchar', 'length' => 512, 'not null' => TRUE],
+      'url_hash' => ['type' => 'varchar_ascii', 'length' => 64, 'not null' => TRUE],
+      'media_id' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'created' => ['type' => 'int', 'not null' => TRUE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'source_record_url' => ['source_id', 'oai_identifier', 'url_hash'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_oai_harvester_uninstall(): void {
+  // Drupal removes this module's config and tables. Imported nodes and media are
+  // intentionally not module-owned and are therefore never deleted here.
+}

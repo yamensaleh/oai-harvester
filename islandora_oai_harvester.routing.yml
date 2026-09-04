@@ -1,0 +1,140 @@
+entity.islandora_oai_source.collection:
+  path: '/admin/islandora/oai-harvester'
+  defaults:
+    _entity_list: 'islandora_oai_source'
+    _title: 'OAI-PMH Harvester'
+  requirements:
+    _permission: 'administer islandora oai sources'
+
+entity.islandora_oai_source.add_form:
+  path: '/admin/islandora/oai-harvester/source/add'
+  defaults:
+    _entity_form: 'islandora_oai_source.add'
+    _title: 'Add OAI-PMH source'
+  requirements:
+    _permission: 'administer islandora oai sources'
+
+entity.islandora_oai_source.edit_form:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}'
+  defaults:
+    _entity_form: 'islandora_oai_source.edit'
+    _title: 'Edit OAI-PMH source'
+  requirements:
+    _permission: 'administer islandora oai sources'
+
+entity.islandora_oai_source.delete_form:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/delete'
+  defaults:
+    _entity_form: 'islandora_oai_source.delete'
+    _title: 'Delete OAI-PMH source'
+  requirements:
+    _permission: 'administer islandora oai sources'
+
+islandora_oai_harvester.source_toggle:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/toggle'
+  defaults:
+    _form: '\Drupal\islandora_oai_harvester\Form\ToggleSourceForm'
+    _title: 'Change OAI-PMH source status'
+  requirements:
+    _permission: 'administer islandora oai sources'
+  options:
+    parameters:
+      islandora_oai_source:
+        type: entity:islandora_oai_source
+
+islandora_oai_harvester.source_test:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/test'
+  defaults:
+    _form: '\Drupal\islandora_oai_harvester\Form\ConnectionTestForm'
+    _title: 'Test OAI-PMH connection'
+  requirements:
+    _permission: 'test islandora oai connections'
+  options:
+    parameters:
+      islandora_oai_source:
+        type: entity:islandora_oai_source
+
+islandora_oai_harvester.source_harvest:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/harvest'
+  defaults:
+    _form: '\Drupal\islandora_oai_harvester\Form\StartHarvestForm'
+    _title: 'Start OAI-PMH harvest'
+  requirements:
+    _permission: 'start islandora oai harvests'
+  options:
+    parameters:
+      islandora_oai_source:
+        type: entity:islandora_oai_source
+
+islandora_oai_harvester.source_preview:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/preview'
+  defaults:
+    _controller: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::preview'
+    _title: 'Preview records'
+  requirements:
+    _permission: 'test islandora oai connections'
+  options:
+    parameters:
+      islandora_oai_source:
+        type: entity:islandora_oai_source
+
+islandora_oai_harvester.source_history:
+  path: '/admin/islandora/oai-harvester/source/{islandora_oai_source}/history'
+  defaults:
+    _controller: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::sourceHistory'
+    _title: 'Harvest history'
+  requirements:
+    _permission: 'view islandora oai history'
+  options:
+    parameters:
+      islandora_oai_source:
+        type: entity:islandora_oai_source
+
+islandora_oai_harvester.run:
+  path: '/admin/islandora/oai-harvester/run/{run_id}'
+  defaults:
+    _controller: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::run'
+    _title: 'Harvest run'
+  requirements:
+    _permission: 'view islandora oai history'
+    run_id: '\d+'
+
+islandora_oai_harvester.run_action:
+  path: '/admin/islandora/oai-harvester/run/{run_id}/{operation}'
+  defaults:
+    _form: '\Drupal\islandora_oai_harvester\Form\RunActionForm'
+    _title: 'Harvest run action'
+  requirements:
+    _custom_access: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::runActionAccess'
+    run_id: '\d+'
+    operation: 'pause|resume|cancel|retry'
+
+islandora_oai_harvester.run_csv:
+  path: '/admin/islandora/oai-harvester/run/{run_id}/errors.csv'
+  defaults:
+    _controller: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::csv'
+  requirements:
+    _permission: 'view islandora oai history'
+    run_id: '\d+'
+
+islandora_oai_harvester.raw:
+  path: '/admin/islandora/oai-harvester/raw/{raw_id}'
+  defaults:
+    _controller: '\Drupal\islandora_oai_harvester\Controller\HarvesterController::raw'
+    _title: 'Raw OAI-PMH metadata'
+  requirements:
+    _permission: 'view islandora oai raw metadata'
+    raw_id: '\d+'
+
+islandora_oai_harvester.record_reharvest:
+  path: '/admin/islandora/oai-harvester/record/{node}/reharvest'
+  defaults:
+    _form: '\Drupal\islandora_oai_harvester\Form\ReharvestRecordForm'
+    _title: 'Re-harvest record'
+  requirements:
+    _permission: 'retry islandora oai records'
+    node: '\d+'
+  options:
+    parameters:
+      node:
+        type: entity:node

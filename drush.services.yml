@@ -1,0 +1,7 @@
+services:
+  islandora_oai_harvester.commands:
+    class: Drupal\islandora_oai_harvester\Commands\OaiHarvesterCommands
+    arguments: ['@islandora_oai_harvester.run_manager', '@entity_type.manager', '@database']
+    tags:
+      - { name: drush.command }
+

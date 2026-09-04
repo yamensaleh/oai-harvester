@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <responseDate>2026-09-03T12:00:00Z</responseDate>
+  <request verb="ListRecords">https://93.184.216.34/oai</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:example:1</identifier>
+        <datestamp>2026-09-01</datestamp>
+        <setSpec>books</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title> First title </dc:title>
+          <dc:title>Second title</dc:title>
+          <dc:creator>Example Author</dc:creator>
+          <dc:subject>Shared subject</dc:subject>
+          <dc:language>EN</dc:language>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header status="deleted">
+        <identifier>oai:example:2</identifier>
+        <datestamp>2026-09-02</datestamp>
+      </header>
+    </record>
+    <resumptionToken cursor="0">next-page-token</resumptionToken>
+  </ListRecords>
+</OAI-PMH>

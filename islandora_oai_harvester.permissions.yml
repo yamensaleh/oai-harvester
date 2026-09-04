@@ -1,0 +1,16 @@
+administer islandora oai sources:
+  title: 'Administer OAI-PMH harvester sources'
+  restrict access: true
+test islandora oai connections:
+  title: 'Test OAI-PMH connections'
+start islandora oai harvests:
+  title: 'Start OAI-PMH harvests'
+pause islandora oai harvests:
+  title: 'Pause or cancel OAI-PMH harvests'
+view islandora oai history:
+  title: 'View OAI-PMH harvest history'
+retry islandora oai records:
+  title: 'Retry failed OAI-PMH records'
+view islandora oai raw metadata:
+  title: 'View raw OAI-PMH source metadata'
+
