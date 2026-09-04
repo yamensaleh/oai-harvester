@@ -36,7 +36,7 @@ final class OaiSourceForm extends EntityForm {
    *
    * Values are normalized and assigned by ::save().
    */
-  protected function buildEntity(array $form, FormStateInterface $form_state): EntityInterface {
+  public function buildEntity(array $form, FormStateInterface $form_state): EntityInterface {
     return $this->entity;
   }
 
