@@ -86,7 +86,7 @@ final class HarvesterController extends ControllerBase {
     $query = $this->database->select('islandora_oai_harvest_run', 'r')->fields('r')->condition('source_id', $islandora_oai_source->id())->orderBy('started', 'DESC')->range(0, 100);
     $rows = [];
     foreach ($query->execute()->fetchAllAssoc('id', \PDO::FETCH_ASSOC) as $run) {
-      $rows[] = [Link::createFromRoute('#' . $run['id'], 'islandora_oai_harvester.run', ['run_id' => $run['id']])->toRenderable(), $run['mode'], $run['state'], date('Y-m-d H:i:s T', (int) $run['started']), $run['completed'] ? date('Y-m-d H:i:s T', (int) $run['completed']) : '', $run['processed'] . ' / ' . $run['queued'], $run['failed_count']];
+      $rows[] = [['data' => Link::createFromRoute('#' . $run['id'], 'islandora_oai_harvester.run', ['run_id' => $run['id']])->toRenderable()], $run['mode'], $run['state'], date('Y-m-d H:i:s T', (int) $run['started']), $run['completed'] ? date('Y-m-d H:i:s T', (int) $run['completed']) : '', $run['processed'] . ' / ' . $run['queued'], $run['failed_count']];
     }
     return ['table' => ['#type' => 'table', '#header' => [$this->t('Run'), $this->t('Mode'), $this->t('State'), $this->t('Started'), $this->t('Completed'), $this->t('Processed / queued'), $this->t('Failed')], '#rows' => $rows, '#empty' => $this->t('No harvest runs yet.')]];
   }
@@ -107,17 +107,17 @@ final class HarvesterController extends ControllerBase {
     $records = [];
     $query = $this->database->select('islandora_oai_raw_record', 'raw')->fields('raw', ['id', 'oai_identifier', 'datestamp', 'status', 'result', 'attempts', 'message'])->condition('run_id', $run_id)->orderBy('id')->range(0, 500);
     foreach ($query->execute()->fetchAll(\PDO::FETCH_ASSOC) as $record) {
-      $records[] = [Link::createFromRoute($record['oai_identifier'], 'islandora_oai_harvester.raw', ['raw_id' => $record['id']])->toRenderable(), $record['datestamp'], $record['status'], $record['result'], $record['attempts'], $record['message']];
+      $records[] = [['data' => Link::createFromRoute($record['oai_identifier'], 'islandora_oai_harvester.raw', ['raw_id' => $record['id']])->toRenderable()], $record['datestamp'], $record['status'], $record['result'], $record['attempts'], $record['message']];
     }
     $actions = [];
     if ($this->currentUser()->hasPermission('pause islandora oai harvests') && !in_array($run['state'], ['completed', 'completed_with_warnings', 'failed', 'cancelled'], TRUE)) {
-      $actions[] = Link::createFromRoute($run['state'] === 'paused' ? $this->t('Resume') : $this->t('Pause'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => $run['state'] === 'paused' ? 'resume' : 'pause'])->toRenderable();
-      $actions[] = Link::createFromRoute($this->t('Cancel'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'cancel'])->toRenderable();
+      $actions[] = ['value' => Link::createFromRoute($run['state'] === 'paused' ? $this->t('Resume') : $this->t('Pause'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => $run['state'] === 'paused' ? 'resume' : 'pause'])->toRenderable()];
+      $actions[] = ['value' => Link::createFromRoute($this->t('Cancel'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'cancel'])->toRenderable()];
     }
     if ($this->currentUser()->hasPermission('retry islandora oai records')) {
-      $actions[] = Link::createFromRoute($this->t('Retry failed records'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'retry'])->toRenderable();
+      $actions[] = ['value' => Link::createFromRoute($this->t('Retry failed records'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'retry'])->toRenderable()];
     }
-    $actions[] = Link::createFromRoute($this->t('Export warnings and failures (CSV)'), 'islandora_oai_harvester.run_csv', ['run_id' => $run_id])->toRenderable();
+    $actions[] = ['value' => Link::createFromRoute($this->t('Export warnings and failures (CSV)'), 'islandora_oai_harvester.run_csv', ['run_id' => $run_id])->toRenderable()];
     return [
       'summary' => ['#type' => 'table', '#header' => [$this->t('Metric'), $this->t('Value')], '#rows' => $rows],
       'actions' => ['#theme' => 'item_list', '#items' => $actions],
