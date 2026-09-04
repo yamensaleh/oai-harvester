@@ -6,7 +6,6 @@ namespace Drupal\islandora_oai_harvester\Form;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityForm;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,13 +16,18 @@ final class OaiSourceForm extends EntityForm {
 
   private const DC_ELEMENTS = ['title', 'creator', 'subject', 'description', 'publisher', 'contributor', 'date', 'type', 'format', 'identifier', 'source', 'language', 'relation', 'coverage', 'rights'];
 
-  public function __construct(private readonly EntityTypeManagerInterface $entityTypeManager, private readonly EntityFieldManagerInterface $entityFieldManager) {}
+  /**
+   * Provides field definitions for the selected destination bundle.
+   */
+  private EntityFieldManagerInterface $entityFieldManager;
 
   /**
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('entity_type.manager'), $container->get('entity_field.manager'));
+    $instance = parent::create($container);
+    $instance->entityFieldManager = $container->get('entity_field.manager');
+    return $instance;
   }
 
   /**
