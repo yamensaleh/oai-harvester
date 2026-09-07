@@ -1,4 +1,4 @@
-islandora_oai_harvester.source_add:
+oai_harvester.source_add:
   route_name: entity.islandora_oai_source.add_form
   title: 'Add source'
   appears_on:

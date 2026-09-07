@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Annotation;
+namespace Drupal\oai_harvester\Annotation;
 
 use Drupal\Component\Annotation\Plugin;
 

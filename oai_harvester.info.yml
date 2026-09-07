@@ -1,4 +1,4 @@
-name: Islandora OAI-PMH Harvester
+name: OAI Harvester
 type: module
 description: 'Asynchronously harvests OAI-PMH metadata into Islandora objects.'
 package: Islandora

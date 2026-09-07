@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Commands;
+namespace Drupal\oai_harvester\Commands;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\islandora_oai_harvester\Service\RunManagerInterface;
+use Drupal\oai_harvester\Service\RunManagerInterface;
 use Drush\Commands\DrushCommands;
 
 /**

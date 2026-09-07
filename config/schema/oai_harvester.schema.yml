@@ -1,4 +1,4 @@
-islandora_oai_harvester.source.*:
+oai_harvester.source.*:
   type: config_entity
   label: 'OAI-PMH source'
   mapping:

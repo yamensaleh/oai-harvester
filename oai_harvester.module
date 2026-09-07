@@ -12,7 +12,7 @@ use Drupal\Core\Url;
 /**
  * Implements hook_cron().
  */
-function islandora_oai_harvester_cron(): void {
+function oai_harvester_cron(): void {
   $storage = \Drupal::entityTypeManager()->getStorage('islandora_oai_source');
   $now = \Drupal::time()->getRequestTime();
   $intervals = ['hourly' => 3600, 'daily' => 86400, 'weekly' => 604800];
@@ -29,7 +29,7 @@ function islandora_oai_harvester_cron(): void {
       ->orderBy('completed', 'DESC')->range(0, 1)->execute()->fetchField();
     $due = (int) $last + ($intervals[$settings['frequency']] ?? 86400);
     if ($due <= $now) {
-      \Drupal::service('islandora_oai_harvester.run_manager')->start($source, 'incremental');
+      \Drupal::service('oai_harvester.run_manager')->start($source, 'incremental');
     }
   }
 }
@@ -37,7 +37,7 @@ function islandora_oai_harvester_cron(): void {
 /**
  * Implements hook_entity_view().
  */
-function islandora_oai_harvester_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
+function oai_harvester_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
   if ($entity->getEntityTypeId() !== 'node' || !\Drupal::currentUser()->hasPermission('view islandora oai history')) {
     return;
   }
@@ -58,13 +58,13 @@ function islandora_oai_harvester_entity_view(array &$build, EntityInterface $ent
   ];
   $links = [];
   if ($record['last_run_id']) {
-    $links[] = ['#type' => 'link', '#title' => t('View harvest run'), '#url' => Url::fromRoute('islandora_oai_harvester.run', ['run_id' => $record['last_run_id']])];
+    $links[] = ['#type' => 'link', '#title' => t('View harvest run'), '#url' => Url::fromRoute('oai_harvester.run', ['run_id' => $record['last_run_id']])];
   }
   if ($record['raw_id'] && \Drupal::currentUser()->hasPermission('view islandora oai raw metadata')) {
-    $links[] = ['#type' => 'link', '#title' => t('View source metadata'), '#url' => Url::fromRoute('islandora_oai_harvester.raw', ['raw_id' => $record['raw_id']])];
+    $links[] = ['#type' => 'link', '#title' => t('View source metadata'), '#url' => Url::fromRoute('oai_harvester.raw', ['raw_id' => $record['raw_id']])];
   }
   if (\Drupal::currentUser()->hasPermission('retry islandora oai records')) {
-    $links[] = ['#type' => 'link', '#title' => t('Re-harvest this record'), '#url' => Url::fromRoute('islandora_oai_harvester.record_reharvest', ['node' => $entity->id()])];
+    $links[] = ['#type' => 'link', '#title' => t('Re-harvest this record'), '#url' => Url::fromRoute('oai_harvester.record_reharvest', ['node' => $entity->id()])];
   }
   $build['islandora_oai_harvest'] = [
     '#type' => 'details',

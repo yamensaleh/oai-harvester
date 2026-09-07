@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\islandora_oai_harvester\Unit;
+namespace Drupal\Tests\oai_harvester\Unit;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
-use Drupal\islandora_oai_harvester\Service\OaiException;
-use Drupal\islandora_oai_harvester\Service\OaiPmhClient;
-use Drupal\islandora_oai_harvester\Service\UrlGuard;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Service\OaiException;
+use Drupal\oai_harvester\Service\OaiPmhClient;
+use Drupal\oai_harvester\Service\UrlGuard;
 use Drupal\Tests\UnitTestCase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -17,8 +17,8 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Log\NullLogger;
 
 /**
- * @coversDefaultClass \Drupal\islandora_oai_harvester\Service\OaiPmhClient
- * @group islandora_oai_harvester
+ * @coversDefaultClass \Drupal\oai_harvester\Service\OaiPmhClient
+ * @group oai_harvester
  */
 final class OaiPmhClientTest extends UnitTestCase {
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Plugin;
+namespace Drupal\oai_harvester\Plugin;
 
 /**
  * Parses one OAI record into normalized values.

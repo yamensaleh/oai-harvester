@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Plugin\FieldTransform;
+namespace Drupal\oai_harvester\Plugin\FieldTransform;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\islandora_oai_harvester\Plugin\FieldTransformInterface;
+use Drupal\oai_harvester\Plugin\FieldTransformInterface;
 
 /**
  * Lowercases metadata values.

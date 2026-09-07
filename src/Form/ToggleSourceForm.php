@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Form;
+namespace Drupal\oai_harvester\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
 
 /**
  * Enables or disables a source using a CSRF-protected confirmation.

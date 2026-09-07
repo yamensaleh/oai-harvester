@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Form;
+namespace Drupal\oai_harvester\Form;
 
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
-use Drupal\islandora_oai_harvester\Service\RunManagerInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Service\RunManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,7 +23,7 @@ final class StartHarvestForm extends ConfirmFormBase {
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('islandora_oai_harvester.run_manager'));
+    return new static($container->get('oai_harvester.run_manager'));
   }
 
   /**
@@ -77,7 +77,7 @@ final class StartHarvestForm extends ConfirmFormBase {
     try {
       $run = $this->runManager->start($this->source, (string) $form_state->getValue('mode'), trim((string) $form_state->getValue('from')) ?: NULL, trim((string) $form_state->getValue('until')) ?: NULL);
       $this->messenger()->addStatus($this->t('Harvest run @id was queued.', ['@id' => $run]));
-      $form_state->setRedirect('islandora_oai_harvester.run', ['run_id' => $run]);
+      $form_state->setRedirect('oai_harvester.run', ['run_id' => $run]);
     }
     catch (\Throwable $exception) {
       $this->messenger()->addError($exception->getMessage());

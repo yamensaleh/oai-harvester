@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Form;
+namespace Drupal\oai_harvester\Form;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\islandora_oai_harvester\Service\RunManager;
+use Drupal\oai_harvester\Service\RunManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -24,7 +24,7 @@ final class RunActionForm extends ConfirmFormBase {
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('islandora_oai_harvester.run_manager'));
+    return new static($container->get('oai_harvester.run_manager'));
   }
 
   /**
@@ -45,7 +45,7 @@ final class RunActionForm extends ConfirmFormBase {
    *
    */
   public function getCancelUrl(): Url {
-    return Url::fromRoute('islandora_oai_harvester.run', ['run_id' => $this->runId]);
+    return Url::fromRoute('oai_harvester.run', ['run_id' => $this->runId]);
   }
 
   /**
@@ -78,7 +78,7 @@ final class RunActionForm extends ConfirmFormBase {
       $this->runManager->setState($this->runId, $state);
       $this->messenger()->addStatus($this->t('Harvest run @id is now @state.', ['@id' => $this->runId, '@state' => $state]));
     }
-    $form_state->setRedirect('islandora_oai_harvester.run', ['run_id' => $this->runId]);
+    $form_state->setRedirect('oai_harvester.run', ['run_id' => $this->runId]);
   }
 
 }

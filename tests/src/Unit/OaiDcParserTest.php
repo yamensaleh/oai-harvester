@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\islandora_oai_harvester\Unit;
+namespace Drupal\Tests\oai_harvester\Unit;
 
-use Drupal\islandora_oai_harvester\Plugin\MetadataParser\OaiDcParser;
+use Drupal\oai_harvester\Plugin\MetadataParser\OaiDcParser;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * @coversDefaultClass \Drupal\islandora_oai_harvester\Plugin\MetadataParser\OaiDcParser
- * @group islandora_oai_harvester
+ * @coversDefaultClass \Drupal\oai_harvester\Plugin\MetadataParser\OaiDcParser
+ * @group oai_harvester
  */
 final class OaiDcParserTest extends UnitTestCase {
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
 
 /**
  * OAI-PMH protocol client contract.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Plugin\QueueWorker;
+namespace Drupal\oai_harvester\Plugin\QueueWorker;
 
 use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\Component\Datetime\TimeInterface;
@@ -13,9 +13,9 @@ use Drupal\Core\Queue\DelayedRequeueException;
 use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\islandora_oai_harvester\Plugin\MetadataParserManager;
-use Drupal\islandora_oai_harvester\Service\OaiPmhClientInterface;
-use Drupal\islandora_oai_harvester\Service\RunManager;
+use Drupal\oai_harvester\Plugin\MetadataParserManager;
+use Drupal\oai_harvester\Service\OaiPmhClientInterface;
+use Drupal\oai_harvester\Service\RunManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -38,7 +38,7 @@ final class DiscoveryQueueWorker extends QueueWorkerBase implements ContainerFac
    *
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('islandora_oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'), $container->get('entity_type.manager'), $container->get('database'), $container->get('queue'), $container->get('islandora_oai_harvester.run_manager'), $container->get('datetime.time'), $container->get('logger.channel.islandora_oai_harvester'));
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'), $container->get('entity_type.manager'), $container->get('database'), $container->get('queue'), $container->get('oai_harvester.run_manager'), $container->get('datetime.time'), $container->get('logger.channel.oai_harvester'));
   }
 
   /**

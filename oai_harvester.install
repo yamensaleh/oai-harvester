@@ -2,13 +2,13 @@
 
 /**
  * @file
- * Install and update hooks for Islandora OAI-PMH Harvester.
+ * Install and update hooks for OAI Harvester.
  */
 
 /**
  * Implements hook_schema().
  */
-function islandora_oai_harvester_schema(): array {
+function oai_harvester_schema(): array {
   $schema['islandora_oai_harvest_run'] = [
     'description' => 'OAI-PMH harvest runs and aggregate progress.',
     'fields' => [
@@ -131,7 +131,7 @@ function islandora_oai_harvester_schema(): array {
 /**
  * Implements hook_uninstall().
  */
-function islandora_oai_harvester_uninstall(): void {
+function oai_harvester_uninstall(): void {
   // Drupal removes this module's config and tables. Imported nodes and media are
   // intentionally not module-owned and are therefore never deleted here.
 }

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\islandora_oai_harvester\Functional;
+namespace Drupal\Tests\oai_harvester\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 
 /**
  * Verifies that harvester administration is not publicly accessible.
  *
- * @group islandora_oai_harvester
+ * @group oai_harvester
  */
 final class AdministrationAccessTest extends BrowserTestBase {
-  protected static $modules = ['islandora_oai_harvester'];
+  protected static $modules = ['oai_harvester'];
   protected $defaultTheme = 'stark';
 
   /**

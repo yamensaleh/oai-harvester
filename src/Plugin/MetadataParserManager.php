@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Plugin;
+namespace Drupal\oai_harvester\Plugin;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -14,7 +14,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 final class MetadataParserManager extends DefaultPluginManager {
 
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/MetadataParser', $namespaces, $module_handler, MetadataParserInterface::class, 'Drupal\islandora_oai_harvester\Annotation\MetadataParser');
+    parent::__construct('Plugin/MetadataParser', $namespaces, $module_handler, MetadataParserInterface::class, 'Drupal\oai_harvester\Annotation\MetadataParser');
     $this->alterInfo('islandora_oai_metadata_parser_info');
     $this->setCacheBackend($cache_backend, 'islandora_oai_metadata_parser_plugins');
   }

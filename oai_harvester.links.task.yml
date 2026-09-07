@@ -1,4 +1,4 @@
-islandora_oai_harvester.sources:
+oai_harvester.sources:
   route_name: entity.islandora_oai_source.collection
   title: 'Sources'
   base_route: entity.islandora_oai_source.collection

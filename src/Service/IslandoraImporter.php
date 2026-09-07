@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
-use Drupal\islandora_oai_harvester\Plugin\FieldTransformManager;
-use Drupal\islandora_oai_harvester\Plugin\MetadataParserManager;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Plugin\FieldTransformManager;
+use Drupal\oai_harvester\Plugin\MetadataParserManager;
 use Psr\Log\LoggerInterface;
 
 /**

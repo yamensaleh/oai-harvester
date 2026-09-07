@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Entity;
+namespace Drupal\oai_harvester\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 

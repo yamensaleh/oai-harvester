@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
-use Drupal\islandora_oai_harvester\Plugin\MetadataParserManager;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Plugin\MetadataParserManager;
 
 /**
  * Extracts URLs only from the administrator-selected metadata element.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester;
+namespace Drupal\oai_harvester;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Database\Connection;
@@ -46,7 +46,7 @@ final class OaiSourceListBuilder extends ConfigEntityListBuilder {
    *
    */
   public function buildRow(EntityInterface $entity): array {
-    /** @var \Drupal\islandora_oai_harvester\Entity\OaiSourceInterface $entity */
+    /** @var \Drupal\oai_harvester\Entity\OaiSourceInterface $entity */
     $config = $entity->toRuntimeConfig();
     $row = [
       'label' => $entity->label(),
@@ -96,13 +96,13 @@ final class OaiSourceListBuilder extends ConfigEntityListBuilder {
   public function getDefaultOperations(EntityInterface $entity): array {
     $operations = parent::getDefaultOperations($entity);
     $id = $entity->id();
-    $operations['test'] = ['title' => $this->t('Test'), 'url' => Url::fromRoute('islandora_oai_harvester.source_test', ['islandora_oai_source' => $id]), 'weight' => 10];
-    $operations['harvest'] = ['title' => $this->t('Harvest now'), 'url' => Url::fromRoute('islandora_oai_harvester.source_harvest', ['islandora_oai_source' => $id]), 'weight' => 11];
-    $operations['history'] = ['title' => $this->t('History'), 'url' => Url::fromRoute('islandora_oai_harvester.source_history', ['islandora_oai_source' => $id]), 'weight' => 12];
-    $operations['preview'] = ['title' => $this->t('Preview'), 'url' => Url::fromRoute('islandora_oai_harvester.source_preview', ['islandora_oai_source' => $id]), 'weight' => 13];
+    $operations['test'] = ['title' => $this->t('Test'), 'url' => Url::fromRoute('oai_harvester.source_test', ['islandora_oai_source' => $id]), 'weight' => 10];
+    $operations['harvest'] = ['title' => $this->t('Harvest now'), 'url' => Url::fromRoute('oai_harvester.source_harvest', ['islandora_oai_source' => $id]), 'weight' => 11];
+    $operations['history'] = ['title' => $this->t('History'), 'url' => Url::fromRoute('oai_harvester.source_history', ['islandora_oai_source' => $id]), 'weight' => 12];
+    $operations['preview'] = ['title' => $this->t('Preview'), 'url' => Url::fromRoute('oai_harvester.source_preview', ['islandora_oai_source' => $id]), 'weight' => 13];
     $operations['toggle'] = [
       'title' => $entity->status() ? $this->t('Disable') : $this->t('Enable'),
-      'url' => Url::fromRoute('islandora_oai_harvester.source_toggle', ['islandora_oai_source' => $id]),
+      'url' => Url::fromRoute('oai_harvester.source_toggle', ['islandora_oai_source' => $id]),
       'weight' => 14,
     ];
     return $operations;

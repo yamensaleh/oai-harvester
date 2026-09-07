@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Plugin\QueueWorker;
+namespace Drupal\oai_harvester\Plugin\QueueWorker;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
@@ -11,9 +11,9 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\DelayedRequeueException;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Queue\RequeueException;
-use Drupal\islandora_oai_harvester\Service\DestinationImporterInterface;
-use Drupal\islandora_oai_harvester\Service\FileImporterInterface;
-use Drupal\islandora_oai_harvester\Service\RunManager;
+use Drupal\oai_harvester\Service\DestinationImporterInterface;
+use Drupal\oai_harvester\Service\FileImporterInterface;
+use Drupal\oai_harvester\Service\RunManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,7 +36,7 @@ final class ImportQueueWorker extends QueueWorkerBase implements ContainerFactor
    *
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
-    return new static($configuration, $plugin_id, $plugin_definition, $container->get('islandora_oai_harvester.importer'), $container->get('islandora_oai_harvester.file_importer'), $container->get('entity_type.manager'), $container->get('database'), $container->get('islandora_oai_harvester.run_manager'), $container->get('datetime.time'), $container->get('logger.channel.islandora_oai_harvester'));
+    return new static($configuration, $plugin_id, $plugin_definition, $container->get('oai_harvester.importer'), $container->get('oai_harvester.file_importer'), $container->get('entity_type.manager'), $container->get('database'), $container->get('oai_harvester.run_manager'), $container->get('datetime.time'), $container->get('logger.channel.oai_harvester'));
   }
 
   /**

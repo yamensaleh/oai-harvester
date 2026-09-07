@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Form;
+namespace Drupal\oai_harvester\Form;
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityForm;
@@ -45,11 +45,11 @@ final class OaiSourceForm extends EntityForm {
    */
   public function form(array $form, FormStateInterface $form_state): array {
     $form = parent::form($form, $form_state);
-    /** @var \Drupal\islandora_oai_harvester\Entity\OaiSourceInterface $source */
+    /** @var \Drupal\oai_harvester\Entity\OaiSourceInterface $source */
     $source = $this->entity;
     $settings = $source->toRuntimeConfig();
     $form['label'] = ['#type' => 'textfield', '#title' => $this->t('Source name'), '#default_value' => $source->label(), '#required' => TRUE];
-    $form['id'] = ['#type' => 'machine_name', '#default_value' => $source->id(), '#machine_name' => ['exists' => '\Drupal\islandora_oai_harvester\Entity\OaiSource::load'], '#disabled' => !$source->isNew()];
+    $form['id'] = ['#type' => 'machine_name', '#default_value' => $source->id(), '#machine_name' => ['exists' => '\Drupal\oai_harvester\Entity\OaiSource::load'], '#disabled' => !$source->isNew()];
     $form['status'] = ['#type' => 'checkbox', '#title' => $this->t('Enabled'), '#default_value' => $source->status()];
 
     $form['connection'] = ['#type' => 'details', '#title' => $this->t('1. Connection'), '#open' => TRUE];

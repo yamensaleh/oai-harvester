@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\islandora_oai_harvester\Unit;
+namespace Drupal\Tests\oai_harvester\Unit;
 
-use Drupal\islandora_oai_harvester\Service\UrlGuard;
+use Drupal\oai_harvester\Service\UrlGuard;
 use Drupal\Tests\UnitTestCase;
 
 /**
- * @group islandora_oai_harvester */
+ * @group oai_harvester */
 final class UrlGuardTest extends UnitTestCase {
 
   /**

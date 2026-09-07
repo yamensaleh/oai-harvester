@@ -1,0 +1,35 @@
+services:
+  logger.channel.oai_harvester:
+    parent: logger.channel_base
+    arguments: ['oai_harvester']
+
+  plugin.manager.islandora_oai_metadata_parser:
+    class: Drupal\oai_harvester\Plugin\MetadataParserManager
+    parent: default_plugin_manager
+
+  plugin.manager.islandora_oai_field_transform:
+    class: Drupal\oai_harvester\Plugin\FieldTransformManager
+    parent: default_plugin_manager
+
+  oai_harvester.url_guard:
+    class: Drupal\oai_harvester\Service\UrlGuard
+
+  oai_harvester.client:
+    class: Drupal\oai_harvester\Service\OaiPmhClient
+    arguments: ['@http_client', '@oai_harvester.url_guard', '@entity_type.manager', '@logger.channel.oai_harvester']
+
+  oai_harvester.run_manager:
+    class: Drupal\oai_harvester\Service\RunManager
+    arguments: ['@database', '@queue', '@datetime.time', '@lock']
+
+  oai_harvester.importer:
+    class: Drupal\oai_harvester\Service\IslandoraImporter
+    arguments: ['@entity_type.manager', '@entity_field.manager', '@plugin.manager.islandora_oai_metadata_parser', '@plugin.manager.islandora_oai_field_transform', '@database', '@datetime.time', '@lock', '@logger.channel.oai_harvester']
+
+  oai_harvester.file_url_extractor:
+    class: Drupal\oai_harvester\Service\MappedFileUrlExtractor
+    arguments: ['@plugin.manager.islandora_oai_metadata_parser']
+
+  oai_harvester.file_importer:
+    class: Drupal\oai_harvester\Service\FileImporter
+    arguments: ['@http_client', '@oai_harvester.url_guard', '@oai_harvester.file_url_extractor', '@entity_type.manager', '@file_system', '@database', '@datetime.time', '@logger.channel.oai_harvester']

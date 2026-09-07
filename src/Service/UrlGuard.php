@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
 /**
  * Rejects URLs that could reach local or private network resources.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Entity;
+namespace Drupal\oai_harvester\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 
@@ -14,10 +14,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   label = @Translation("OAI-PMH source"),
  *   label_collection = @Translation("OAI-PMH sources"),
  *   handlers = {
- *     "list_builder" = "Drupal\islandora_oai_harvester\OaiSourceListBuilder",
+ *     "list_builder" = "Drupal\oai_harvester\OaiSourceListBuilder",
  *     "form" = {
- *       "add" = "Drupal\islandora_oai_harvester\Form\OaiSourceForm",
- *       "edit" = "Drupal\islandora_oai_harvester\Form\OaiSourceForm",
+ *       "add" = "Drupal\oai_harvester\Form\OaiSourceForm",
+ *       "edit" = "Drupal\oai_harvester\Form\OaiSourceForm",
  *       "delete" = "Drupal\Core\Entity\EntityDeleteForm"
  *     }
  *   },

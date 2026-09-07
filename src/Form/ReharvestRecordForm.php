@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Form;
+namespace Drupal\oai_harvester\Form;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\islandora_oai_harvester\Plugin\MetadataParserManager;
-use Drupal\islandora_oai_harvester\Service\OaiPmhClientInterface;
-use Drupal\islandora_oai_harvester\Service\RunManagerInterface;
+use Drupal\oai_harvester\Plugin\MetadataParserManager;
+use Drupal\oai_harvester\Service\OaiPmhClientInterface;
+use Drupal\oai_harvester\Service\RunManagerInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,7 +29,7 @@ final class ReharvestRecordForm extends ConfirmFormBase {
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('database'), $container->get('entity_type.manager'), $container->get('islandora_oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'), $container->get('islandora_oai_harvester.run_manager'));
+    return new static($container->get('database'), $container->get('entity_type.manager'), $container->get('oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'), $container->get('oai_harvester.run_manager'));
   }
 
   /**
@@ -83,7 +83,7 @@ final class ReharvestRecordForm extends ConfirmFormBase {
       $record = $this->parserManager->forPrefix($source->getMetadataPrefix())->parse($xml);
       $runId = $this->runManager->queueRecord($source, $record['identifier'], $record['datestamp'], $record['sets'], $record['deleted'], $xml);
       $this->messenger()->addStatus($this->t('Record queued in harvest run @id.', ['@id' => $runId]));
-      $form_state->setRedirect('islandora_oai_harvester.run', ['run_id' => $runId]);
+      $form_state->setRedirect('oai_harvester.run', ['run_id' => $runId]);
     }
     catch (\Throwable $exception) {
       $this->messenger()->addError($this->t('Could not retrieve record: @message', ['@message' => $exception->getMessage()]));

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 

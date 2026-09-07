@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Service;
+namespace Drupal\oai_harvester\Service;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
 
 /**
  * Creates harvest runs and keeps aggregate progress transactionally.

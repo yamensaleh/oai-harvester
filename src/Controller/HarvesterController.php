@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Drupal\islandora_oai_harvester\Controller;
+namespace Drupal\oai_harvester\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\islandora_oai_harvester\Entity\OaiSourceInterface;
-use Drupal\islandora_oai_harvester\Plugin\MetadataParserManager;
-use Drupal\islandora_oai_harvester\Service\OaiPmhClientInterface;
+use Drupal\oai_harvester\Entity\OaiSourceInterface;
+use Drupal\oai_harvester\Plugin\MetadataParserManager;
+use Drupal\oai_harvester\Service\OaiPmhClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -28,7 +28,7 @@ final class HarvesterController extends ControllerBase {
    *
    */
   public static function create(ContainerInterface $container): static {
-    return new static($container->get('database'), $container->get('islandora_oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'));
+    return new static($container->get('database'), $container->get('oai_harvester.client'), $container->get('plugin.manager.islandora_oai_metadata_parser'));
   }
 
   /**
@@ -71,7 +71,7 @@ final class HarvesterController extends ControllerBase {
       return [
         'notice' => ['#markup' => '<p>' . $this->t('Preview is read-only and never creates Islandora objects. Use Harvest now to explicitly queue imports.') . '</p>'],
         'table' => ['#type' => 'table', '#header' => [$this->t('OAI identifier'), $this->t('Datestamp'), $this->t('Parsed and mapped values'), $this->t('Validation warnings'), $this->t('Downloadable URL detected')], '#rows' => $rows, '#empty' => $this->t('No records returned.')],
-        'harvest' => Link::createFromRoute($this->t('Harvest now'), 'islandora_oai_harvester.source_harvest', ['islandora_oai_source' => $islandora_oai_source->id()])->toRenderable(),
+        'harvest' => Link::createFromRoute($this->t('Harvest now'), 'oai_harvester.source_harvest', ['islandora_oai_source' => $islandora_oai_source->id()])->toRenderable(),
       ];
     }
     catch (\Throwable $exception) {
@@ -86,7 +86,7 @@ final class HarvesterController extends ControllerBase {
     $query = $this->database->select('islandora_oai_harvest_run', 'r')->fields('r')->condition('source_id', $islandora_oai_source->id())->orderBy('started', 'DESC')->range(0, 100);
     $rows = [];
     foreach ($query->execute()->fetchAllAssoc('id', \PDO::FETCH_ASSOC) as $run) {
-      $rows[] = [['data' => Link::createFromRoute('#' . $run['id'], 'islandora_oai_harvester.run', ['run_id' => $run['id']])->toRenderable()], $run['mode'], $run['state'], date('Y-m-d H:i:s T', (int) $run['started']), $run['completed'] ? date('Y-m-d H:i:s T', (int) $run['completed']) : '', $run['processed'] . ' / ' . $run['queued'], $run['failed_count']];
+      $rows[] = [['data' => Link::createFromRoute('#' . $run['id'], 'oai_harvester.run', ['run_id' => $run['id']])->toRenderable()], $run['mode'], $run['state'], date('Y-m-d H:i:s T', (int) $run['started']), $run['completed'] ? date('Y-m-d H:i:s T', (int) $run['completed']) : '', $run['processed'] . ' / ' . $run['queued'], $run['failed_count']];
     }
     return ['table' => ['#type' => 'table', '#header' => [$this->t('Run'), $this->t('Mode'), $this->t('State'), $this->t('Started'), $this->t('Completed'), $this->t('Processed / queued'), $this->t('Failed')], '#rows' => $rows, '#empty' => $this->t('No harvest runs yet.')]];
   }
@@ -107,17 +107,17 @@ final class HarvesterController extends ControllerBase {
     $records = [];
     $query = $this->database->select('islandora_oai_raw_record', 'raw')->fields('raw', ['id', 'oai_identifier', 'datestamp', 'status', 'result', 'attempts', 'message'])->condition('run_id', $run_id)->orderBy('id')->range(0, 500);
     foreach ($query->execute()->fetchAll(\PDO::FETCH_ASSOC) as $record) {
-      $records[] = [['data' => Link::createFromRoute($record['oai_identifier'], 'islandora_oai_harvester.raw', ['raw_id' => $record['id']])->toRenderable()], $record['datestamp'], $record['status'], $record['result'], $record['attempts'], $record['message']];
+      $records[] = [['data' => Link::createFromRoute($record['oai_identifier'], 'oai_harvester.raw', ['raw_id' => $record['id']])->toRenderable()], $record['datestamp'], $record['status'], $record['result'], $record['attempts'], $record['message']];
     }
     $actions = [];
     if ($this->currentUser()->hasPermission('pause islandora oai harvests') && !in_array($run['state'], ['completed', 'completed_with_warnings', 'failed', 'cancelled'], TRUE)) {
-      $actions[] = ['value' => Link::createFromRoute($run['state'] === 'paused' ? $this->t('Resume') : $this->t('Pause'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => $run['state'] === 'paused' ? 'resume' : 'pause'])->toRenderable()];
-      $actions[] = ['value' => Link::createFromRoute($this->t('Cancel'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'cancel'])->toRenderable()];
+      $actions[] = ['value' => Link::createFromRoute($run['state'] === 'paused' ? $this->t('Resume') : $this->t('Pause'), 'oai_harvester.run_action', ['run_id' => $run_id, 'operation' => $run['state'] === 'paused' ? 'resume' : 'pause'])->toRenderable()];
+      $actions[] = ['value' => Link::createFromRoute($this->t('Cancel'), 'oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'cancel'])->toRenderable()];
     }
     if ($this->currentUser()->hasPermission('retry islandora oai records')) {
-      $actions[] = ['value' => Link::createFromRoute($this->t('Retry failed records'), 'islandora_oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'retry'])->toRenderable()];
+      $actions[] = ['value' => Link::createFromRoute($this->t('Retry failed records'), 'oai_harvester.run_action', ['run_id' => $run_id, 'operation' => 'retry'])->toRenderable()];
     }
-    $actions[] = ['value' => Link::createFromRoute($this->t('Export warnings and failures (CSV)'), 'islandora_oai_harvester.run_csv', ['run_id' => $run_id])->toRenderable()];
+    $actions[] = ['value' => Link::createFromRoute($this->t('Export warnings and failures (CSV)'), 'oai_harvester.run_csv', ['run_id' => $run_id])->toRenderable()];
     return [
       'summary' => ['#type' => 'table', '#header' => [$this->t('Metric'), $this->t('Value')], '#rows' => $rows],
       'actions' => ['#theme' => 'item_list', '#items' => $actions],
