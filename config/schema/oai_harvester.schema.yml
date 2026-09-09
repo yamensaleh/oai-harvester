@@ -52,6 +52,10 @@ oai_harvester.source.*:
     collection_nid:
       type: integer
       nullable: true
+    owner_uid:
+      type: integer
+      nullable: true
+      label: 'Imported node owner'
     default_status:
       type: boolean
     mappings:

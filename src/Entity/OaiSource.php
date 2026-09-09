@@ -32,7 +32,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "id", "label", "status", "endpoint", "auth_key_id",
  *     "metadata_prefix", "granularity", "set_specs", "repository_info",
  *     "available_formats", "available_sets", "bundle", "model_tid", "category_tid",
- *     "collection_nid", "default_status", "mappings", "frequency",
+ *     "collection_nid", "owner_uid", "default_status", "mappings", "frequency",
  *     "batch_size", "update_policy", "deletion_policy", "timeout",
  *     "max_retries", "rate_limit_ms", "file_settings"
  *   },
@@ -59,6 +59,7 @@ final class OaiSource extends ConfigEntityBase implements OaiSourceInterface {
   protected ?int $model_tid = NULL;
   protected ?int $category_tid = NULL;
   protected ?int $collection_nid = NULL;
+  protected ?int $owner_uid = 1;
   protected bool $default_status = FALSE;
   protected array $mappings = [];
   protected string $frequency = 'daily';
@@ -133,6 +134,7 @@ final class OaiSource extends ConfigEntityBase implements OaiSourceInterface {
       'model_tid' => $this->model_tid,
       'category_tid' => $this->category_tid,
       'collection_nid' => $this->collection_nid,
+      'owner_uid' => $this->owner_uid,
       'default_status' => $this->default_status,
       'mappings' => $this->mappings,
       'frequency' => $this->frequency,

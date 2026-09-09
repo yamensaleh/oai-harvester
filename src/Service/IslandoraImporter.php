@@ -86,10 +86,18 @@ final class IslandoraImporter implements DestinationImporterInterface {
         'type' => $settings['bundle'],
         'title' => $title,
         'status' => (int) $settings['default_status'],
+        // Queue workers run without a browser user. Set an explicit owner so
+        // imported records do not silently become owned by Anonymous (uid 0).
+        'uid' => max(1, (int) ($settings['owner_uid'] ?? 1)),
       ]);
     }
     else {
       $node->setTitle($title);
+      // Repair legacy imports that were created without an explicit owner,
+      // while preserving any owner assigned manually after import.
+      if ((int) $node->getOwnerId() === 0) {
+        $node->setOwnerId(max(1, (int) ($settings['owner_uid'] ?? 1)));
+      }
     }
     $definitions = $this->entityFieldManager->getFieldDefinitions('node', $settings['bundle']);
     $warnings = [];
